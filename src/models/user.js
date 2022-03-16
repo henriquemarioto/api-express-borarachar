@@ -39,14 +39,11 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
-    streamings: {
-        type: Object,
-        default: {
-            searching_for: [],
-            already_member: [],
-        },
-    }, 
-    notification: {
+    searching_for: {
+        type: Array,
+        default: []
+    },
+    already_member: {
         type: Array,
         default: []
     },
