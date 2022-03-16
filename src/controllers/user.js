@@ -1,4 +1,5 @@
 import User from '../models/user.js'
+import jwt from "jsonwebtoken"
 
 class UserControllers {
     static async createUser(req, res) {
@@ -15,7 +16,11 @@ class UserControllers {
 
             delete user.password
 
-            res.status(201).json(user)
+            const token = jwt.sign({
+                id: user.id
+            }, process.env.SECRET, { expiresIn: "1d" })
+
+            res.status(201).json({token, id: user.id})
         }
         catch (error) {
             res.status(500).json(error)
@@ -67,10 +72,36 @@ class UserControllers {
 
             await User.findByIdAndRemove(id)
 
-            res.status(204).json(userUpdated)
+            res.status(204).json({})
         }
         catch (error) {
             res.status(500).json(error)
+        }
+    }
+
+    static async login(req, res) {
+        try {
+            const { email, password } = req.body
+
+            const user = await User.findOne({
+                email
+            }).select("+password")
+
+            if(!user){
+                res.status(404).json({error: "usuário não encontrado"})
+            }
+
+            if(user.password !== password){
+                res.status(409).json({error: "Senha inválida"})
+            }
+
+            const token = jwt.sign({
+                id: user.id
+            }, process.env.SECRET, {expiresIn: "1d"})
+
+            res.json({token, id: user.id})
+        } catch (error) {
+
         }
     }
 }

@@ -13,6 +13,15 @@ const groupSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    members: {
+        type: Array,
+        default: []
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     created_at: {
         type: String,
         default: new Date(),
