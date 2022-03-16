@@ -4,15 +4,15 @@ export const isAuthenticated = (req, res, next) => {
     try {
         const { authorization } = req.headers
 
-        const [type, token] = authorization.split(" ")
-
-        if(!token){
+        if(!authorization){
             res.status(400).json({error: "Missing token"})
         }
 
+        const [type, token] = authorization.split(" ")
+
         jsonwebtoken.verify(token, process.env.SECRET, (err, decoded) => {
             if(err){
-                return res.status(401).send({error: "Token invalid"})
+                return res.status(401).send({error: "Invalid token"})
             }
 
             req.userId = decoded.id
