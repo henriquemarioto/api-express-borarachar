@@ -67,6 +67,18 @@ class GroupControllers {
             res.status(500).json(error)
         }
     }
+
+    static async joinMember(req, res){
+        try {
+            const { id } = req.params
+            const group = await Group.findById(id)
+
+            console.log(group)
+
+        } catch (error) {
+            
+        }
+    }
 }
 
 export default GroupControllers
