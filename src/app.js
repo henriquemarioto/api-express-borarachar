@@ -4,10 +4,13 @@ import routerGroups from './routes/group.js'
 import routerRegister from './routes/register.js'
 import routerLogin from './routes/login.js'
 import { config } from 'dotenv'
+import cors from 'cors'
 
 config()
 const app = express()
 app.use(express.json())
+
+app.use(cors())
 
 app.use('/users', routerUsers)
 app.use('/groups', routerGroups)
