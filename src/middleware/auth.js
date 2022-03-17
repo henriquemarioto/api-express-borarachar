@@ -1,5 +1,6 @@
 import jsonwebtoken from "jsonwebtoken";
 import Group from "../models/group.js";
+import User from "../models/user.js"
 
 export const isAuthenticated = (req, res, next) => {
     try {
@@ -24,28 +25,56 @@ export const isAuthenticated = (req, res, next) => {
     }
 }
 
-export const isRecurseOwner = (req, res, next) => {
+export const isGroupOwner = (req, res, next) => {
     const { authorization } = req.headers;
     const token = authorization.split(" ")[1];
-    const recurseId = req.params.id;
+    const groupId = req.params.id;
 
-    jwt.verify(
+    jsonwebtoken.verify(
         token,
         process.env.SECRET,
         async (err, decoded) => {
-            const userId = decoded.id;
+            const tokenUserId = decoded.id;
 
-            const recurse = await Group.findById(recurseId)
+            const group = await Group.findById(groupId)
+            const groupOwnerId = group.owner.toString()
 
-            if (!recurse) {
-                return res.status(404).json({ error: "Recurse not found" });
+            if (!group) {
+                return res.status(404).json({ error: "Group not found" });
             }
 
-            if (recurse.owner !== userId) {
-                return res.status(401).json({ error: "This user does not own this recurse" });
+            if (groupOwnerId !== tokenUserId) {
+                return res.status(401).json({ error: "This user does not own this group" });
             }
 
-            next();
+            return next();
+        }
+    );
+};
+
+export const isUserOwner = (req, res, next) => {
+    const { authorization } = req.headers;
+    const token = authorization.split(" ")[1];
+    const userId = req.params.id;
+
+    jsonwebtoken.verify(
+        token,
+        process.env.SECRET,
+        async (err, decoded) => {
+            const tokenUserId = decoded.id;
+
+            const user = await User.findById(userId)
+            const userDbId = user._id.toString()
+
+            if (!user) {
+                return res.status(404).json({ error: "user not found" });
+            }
+
+            if (userDbId !== tokenUserId) {
+                return res.status(401).json({ error: "This token not is from this user" });
+            }
+
+            return next();
         }
     );
 };

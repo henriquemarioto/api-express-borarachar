@@ -68,15 +68,22 @@ class GroupControllers {
         }
     }
 
-    static async joinMember(req, res){
+    static async joinMember(req, res) {
         try {
             const { id } = req.params
+            const { member } = req.body
             const group = await Group.findById(id)
 
-            console.log(group)
+            const members = [...group.members, member]
+
+            const groupUpdated = await Group.findByIdAndUpdate(id, { members }, {
+                returnDocument: "after"
+            })
+            
+            res.status(201).json(groupUpdated)
 
         } catch (error) {
-            
+            res.status(500).json(error)
         }
     }
 }
