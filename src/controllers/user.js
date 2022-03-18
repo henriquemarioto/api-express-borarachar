@@ -1,5 +1,6 @@
 import User from '../models/user.js'
 import Group from '../models/group.js'
+import Streaming from '../models/streaming.js'
 import GroupControllers from './group.js'
 import jwt from "jsonwebtoken"
 
@@ -47,6 +48,17 @@ class UserControllers {
         try {
             const { id } = req.params
             const user = await User.findById(id)
+
+            const streamingsData = []
+
+            await Promise.all(user.searching_for.map(async stremingId => {
+
+                const streamingData = await Streaming.findById(stremingId).select("image")
+                streamingsData.push(streamingData)
+
+            }))
+
+            user.searching_for = streamingsData
 
             res.json(user)
         } catch (error) {
@@ -108,10 +120,10 @@ class UserControllers {
     static async updateUser(req, res) {
         try {
             const { id } = req.params
-            const { name, bio, contacts, streamings, notification } = req.body
+            const { name, bio, contacts, searching_for, notification } = req.body
 
             const userUpdated = await User.findByIdAndUpdate(id, {
-                name, bio, contacts, streamings, notification, updated_at: new Date(), new: true
+                name, bio, contacts, searching_for, notification, updated_at: new Date(), new: true
             }, {
                 returnDocument: "after"
             })

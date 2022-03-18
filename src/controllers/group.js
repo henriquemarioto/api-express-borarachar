@@ -97,6 +97,12 @@ class GroupControllers {
                 return res.status(400).json({error: "Usuário ja faz parte desse grupo"})
             }
 
+            const groupFull = group.members.length >= group.members_limit
+
+            if(groupFull){
+                return res.status(400).json({error: "Grupo cheio"})
+            }
+
             const members = [...group.members, {
                 userId,
                 status: "pending",

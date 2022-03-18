@@ -17,6 +17,17 @@ class StreamingControllers {
         }
     }
 
+    static async getById(req, res){
+        try {
+            const { id } = req.params
+            const streaming = await Streaming.findById(id)
+
+            res.json(streaming)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
     static async getAll(req, res){
         try {
             const streamings = await Streaming.find()
