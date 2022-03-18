@@ -4,14 +4,18 @@ import jwt from "jsonwebtoken"
 class UserControllers {
     static async createUser(req, res) {
         try {
-            const { name, email, cpf, phone, password } = req.body
+            const { name, email, cpf, phone, password, gender } = req.body
+
+            const avatar_url = gender === "m" ? process.env.MALE : gender === "f" ? process.env.FEMALE : process.env.OTHER
 
             const user = await User.create({
                 name,
                 email,
                 password,
                 cpf,
-                phone
+                phone,
+                gender,
+                avatar_url
             })
 
             delete user.password

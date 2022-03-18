@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    gender: {
+        type: String,
+        required: true
+    },
     phone: {
         type: Number,
         required: true,
@@ -33,7 +37,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar_url: {
         type: String,
-        default: ""
+        required: true
     },
     contacts: {
         type: Array,
