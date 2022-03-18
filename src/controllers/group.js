@@ -47,9 +47,10 @@ class GroupControllers {
             const { id } = req.params
             const group = await Group.findById(id)
 
-            const filteredGroupData = await GroupControllers.allDataGroupUser(group)
+            
+            const filteredGroup = await GroupControllers.filterGroupsData(group)
 
-            res.json(filteredGroupData)
+            res.json(filteredGroup)
         } catch (error) {
             res.status(500).json(error)
         }

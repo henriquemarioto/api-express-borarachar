@@ -8,10 +8,18 @@ const streamingSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: ""
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    profiles: {
+        type: String,
+        required: true
     },
     plans: {
-        type: Object,
+        type: Array,
         required: true
     },
     created_at: {

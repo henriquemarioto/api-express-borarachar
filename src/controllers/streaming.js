@@ -4,10 +4,10 @@ import jsonwebtoken from 'jsonwebtoken';
 class StreamingControllers {
     static async create(req, res){
         try {
-            const { name, image, plans } = req.body
+            const { name, type, profiles, image, plans } = req.body
 
             const streaming = await Streaming.create({
-                name, image, plans
+                name, type, profiles, image, plans
             })
 
             res.status(201).json({ id: streaming.id })
