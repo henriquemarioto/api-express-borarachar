@@ -3,6 +3,7 @@ import routerUsers from './routes/user.js'
 import routerGroups from './routes/group.js'
 import routerRegister from './routes/register.js'
 import routerLogin from './routes/login.js'
+import recovery from './routes/recovery.js'
 import { config } from 'dotenv'
 import cors from 'cors'
 
@@ -16,5 +17,6 @@ app.use('/users', routerUsers)
 app.use('/groups', routerGroups)
 app.use('/register', routerRegister)
 app.use('/login', routerLogin)
+app.use('/recovery', recovery)
 
 export default app

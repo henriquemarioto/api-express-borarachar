@@ -48,6 +48,30 @@ class UserControllers {
         }
     }
 
+    static async recoveryPassword(req, res) {
+        const { email, phone, cpf, newPassword } = req.body
+
+        console.log(newPassword)
+
+        try {
+            const user = await User.findOne({ email, phone, cpf })
+
+            if(user){
+                await User.findByIdAndUpdate(user.id, {
+                    password: newPassword, updated_at: new Date(), new: true
+                })
+                res.json({})
+            }
+            else{
+                throw "Usuário não encontrado"
+            }
+        } catch (error) {
+            res.status(404).json({error})
+        }
+        
+
+    }
+
     static async updateUser(req, res) {
         try {
             const { id } = req.params
