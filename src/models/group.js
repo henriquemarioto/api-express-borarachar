@@ -10,17 +10,17 @@ const groupSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    members_limit: {
-        type: Number,
+    owner: {
+        type: String,
+        ref: "User",
         required: true
     },
     members: {
         type: Array,
-        default: []
+        required: true
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+    members_limit: {
+        type: Number,
         required: true
     },
     pix_key: {
@@ -40,7 +40,7 @@ const groupSchema = new mongoose.Schema({
         required: true,
         select: false
     },
-    searching_for_people: {
+    searching_for_members: {
         type: Boolean,
         required: true
     },

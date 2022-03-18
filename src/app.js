@@ -17,6 +17,6 @@ app.use('/users', routerUsers)
 app.use('/groups', routerGroups)
 app.use('/register', routerRegister)
 app.use('/login', routerLogin)
-app.use('/recovery', recovery)
+app.use('/recovery/:id', recovery)
 
 export default app

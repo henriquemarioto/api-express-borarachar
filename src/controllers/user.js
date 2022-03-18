@@ -1,4 +1,5 @@
 import User from '../models/user.js'
+import Group from '../models/group.js'
 import jwt from "jsonwebtoken"
 
 class UserControllers {
@@ -22,9 +23,9 @@ class UserControllers {
 
             const token = jwt.sign({
                 id: user.id
-            }, process.env.SECRET, { expiresIn: "1d" })
+            }, process.env.SECRET, { expiresIn: "8d" })
 
-            res.status(201).json({token, id: user.id})
+            res.status(201).json({ token, id: user.id })
         }
         catch (error) {
             res.status(500).json(error)
@@ -52,25 +53,41 @@ class UserControllers {
         }
     }
 
+    static async getUserGroups(req, res) {
+        try {
+            const { id } = req.query
+
+            const groups = await Group.find({members: id})
+
+            if (!groups.length) {
+                throw "Nenhum grupo encontrado"
+            }
+
+            res.status(200).json(groups)
+        } catch (error) {
+            res.status(500).json({ error })
+        }
+    }
+
     static async recoveryPassword(req, res) {
         const { email, phone, cpf, newPassword } = req.body
 
         try {
             const user = await User.findOne({ email, phone, cpf })
 
-            if(user){
+            if (user) {
                 await User.findByIdAndUpdate(user.id, {
                     password: newPassword, updated_at: new Date(), new: true
                 })
                 res.json({})
             }
-            else{
+            else {
                 throw "Usuário não encontrado"
             }
         } catch (error) {
-            res.status(404).json({error})
+            res.status(404).json({ error })
         }
-        
+
 
     }
 
@@ -113,19 +130,19 @@ class UserControllers {
                 email
             }).select("+password")
 
-            if(!user){
-                res.status(404).json({error: "usuário não encontrado"})
+            if (!user) {
+                res.status(404).json({ error: "usuário não encontrado" })
             }
 
-            if(user.password !== password){
-                res.status(409).json({error: "Senha inválida"})
+            if (user.password !== password) {
+                res.status(409).json({ error: "Senha inválida" })
             }
 
             const token = jwt.sign({
                 id: user.id
-            }, process.env.SECRET, {expiresIn: "1d"})
+            }, process.env.SECRET, { expiresIn: "8d" })
 
-            res.json({token, id: user.id})
+            res.json({ token, id: user.id })
         } catch (error) {
 
         }
