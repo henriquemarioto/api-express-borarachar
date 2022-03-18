@@ -4,6 +4,7 @@ import routerGroups from './routes/group.js'
 import routerRegister from './routes/register.js'
 import routerLogin from './routes/login.js'
 import recovery from './routes/recovery.js'
+import routerStreaming from './routes/streaming.js'
 import { config } from 'dotenv'
 import cors from 'cors'
 
@@ -18,5 +19,6 @@ app.use('/groups', routerGroups)
 app.use('/register', routerRegister)
 app.use('/login', routerLogin)
 app.use('/recovery/:id', recovery)
+app.use("/streamings", routerStreaming)
 
 export default app

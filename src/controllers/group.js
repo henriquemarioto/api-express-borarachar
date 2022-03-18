@@ -1,11 +1,12 @@
 import Group from '../models/group.js'
 import User from '../models/user.js';
+import Streaming from '../models/streaming.js';
 import jsonwebtoken from 'jsonwebtoken';
 
 class GroupControllers {
     static async createGroup(req, res) {
         try {
-            const { name, description, members_limit, pix_key, pay_day, account_email, account_password, searching_for_members } = req.body
+            const { name, description, members_limit, streaming, pix_key, pay_day, account_email, account_password, searching_for_members } = req.body
             const { authorization } = req.headers
             const token = authorization.split(" ")[1];
             let tokenUserId = ""
@@ -26,7 +27,7 @@ class GroupControllers {
 
 
             const group = await Group.create({
-                name, description, members, members_limit, owner: tokenUserId, pix_key, pay_day, account_email, account_password, searching_for_members
+                name, description, members, streaming, members_limit, owner: tokenUserId, pix_key, pay_day, account_email, account_password, searching_for_members
             })
 
             res.status(201).json({ id: group.id })
@@ -38,10 +39,7 @@ class GroupControllers {
 
     static async getAllGroups(req, res) {
         try {
-            const groups = await Group.find().select("members").select("name").select("owner")
-
-
-
+            const groups = await Group.find().select("members").select("name").select("owner").select("streaming")
 
             await Promise.all(groups.map(async group => {
                 const membersArrObj = []
@@ -57,10 +55,13 @@ class GroupControllers {
 
                 const newMembers = await User.find({ $or: [...membersArrObj] }).select("avatar_url")
                 group.members = newMembers
+
+                const streamingData = await Streaming.findById(group.streaming.streamingId)
+                group.streaming = {name: streamingData.name, image: streamingData.image, plan: streamingData.plans.find(item => item.name === group.streaming.plan)}
+                
+                
             }))
                 
-            
-
             res.status(200).json(groups)
         } catch (error) {
             res.status(500).json(error)

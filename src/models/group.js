@@ -15,12 +15,16 @@ const groupSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    members: {
-        type: Array,
-        required: true
-    },
     members_limit: {
         type: Number,
+        required: true
+    },
+    streaming: {
+        type: Object,
+        required: true
+    },
+    members: {
+        type: Array,
         required: true
     },
     pix_key: {
