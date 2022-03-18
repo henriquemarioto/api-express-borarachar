@@ -8,8 +8,8 @@ routerGroups.use(isAuthenticated)
 routerGroups.post("", GroupControllers.createGroup)
 routerGroups.get("", GroupControllers.getAllGroups)
 routerGroups.get("/:id", GroupControllers.getGroupById)
-routerGroups.patch("/:id", GroupControllers.updateGroup)
 routerGroups.patch("/join", GroupControllers.join)
+routerGroups.patch("/:id", GroupControllers.updateGroup)
 routerGroups.delete("/:id", GroupControllers.deleteGroup)
 
 

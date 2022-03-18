@@ -1,5 +1,6 @@
 import User from '../models/user.js'
 import Group from '../models/group.js'
+import GroupControllers from './group.js'
 import jwt from "jsonwebtoken"
 
 class UserControllers {
@@ -55,13 +56,26 @@ class UserControllers {
 
     static async getUserGroups(req, res) {
         try {
-            const { id } = req.query
-
-            const groups = await Group.find({members: id})
+            const groups = await Group.find({
+                members: {
+                    $elemMatch: {
+                        userId: req.userId
+                    }
+                }
+            })
 
             if (!groups.length) {
                 throw "Nenhum grupo encontrado"
             }
+
+            const filteredGroupData = []
+
+            await Promise.all(groups.map(async group => {
+
+                const filteredGroup = await GroupControllers.filterGroupsData(group)
+                filteredGroupData.push(filteredGroup)
+
+            }))
 
             res.status(200).json(groups)
         } catch (error) {
