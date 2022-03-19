@@ -47,7 +47,7 @@ class GroupControllers {
             const group = await Group.findById(id)
 
             
-            const filteredGroup = await GroupControllers.filterGroupsData(group)
+            const filteredGroup = await GroupControllers.allDataGroupId(group)
 
             res.json(filteredGroup)
         } catch (error) {
