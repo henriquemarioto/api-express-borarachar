@@ -134,8 +134,8 @@ class GroupControllers {
 
             const group = await Group.findById(id)
 
-            if(userId === group.owner || userId === group.members.find(item => item.userId === userId) && group.members.length > 1){
-                return res.status(400).json({error: "O dono não pode sair se o grupo tiver membro"})
+            if((userId === group.owner || userId === group.members.find(item => item.userId === userId)) && group.members.length > 1){
+                return res.status(400).json({error: "O dono não pode sair se o grupo tiver membros"})
             }
 
             const members = group.members.filter(item => item.userId !== userId)
@@ -171,7 +171,7 @@ class GroupControllers {
     static async allDataGroupId(group){
         const membersArrObj = group.members.map(member => {return {_id: member.userId }})
 
-        group.members = (await User.find({ $or: [...membersArrObj] }).select("avatar_url").select("name")).map((item, i) => {
+        group.members = (await User.find({ $or: [...membersArrObj] }).select("avatar_url").select("name").select("phone")).map((item, i) => {
             const memberInfo = { ...group.members[i], ...item._doc }
             delete memberInfo._id
             return memberInfo
