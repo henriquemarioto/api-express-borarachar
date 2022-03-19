@@ -141,10 +141,11 @@ class GroupControllers {
             if(!members.length){
                 await Group.findByIdAndDelete(id)
             }
-
-            const groupUpdated = await Group.findByIdAndUpdate(id, { members }, {
-                returnDocument: "after"
-            })
+            else{
+                await Group.findByIdAndUpdate(id, { members }, {
+                    returnDocument: "after"
+                })
+            }
 
             res.status(201).json({})
 
