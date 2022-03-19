@@ -2,6 +2,7 @@ import User from '../models/user.js'
 import Group from '../models/group.js'
 import Streaming from '../models/streaming.js'
 import GroupControllers from './group.js'
+import StreamingControllers from './streaming.js'
 import jwt from "jsonwebtoken"
 
 class UserControllers {
@@ -36,9 +37,16 @@ class UserControllers {
 
     static async getAllUsers(req, res) {
         try {
-            const user = await User.find()
+            const users = await User.find()
 
-            res.json(user)
+            
+            await Promise.all(users.map(async user => {
+
+                user = await StreamingControllers.getUserStreaming(user)
+
+            }))     
+
+            res.json(users)
         } catch (error) {
             res.status(500).json(error)
         }
@@ -46,21 +54,12 @@ class UserControllers {
 
     static async getUserById(req, res) {
         try {
-            const { id } = req.params
-            const user = await User.findById(id)
+            const { userId } = req
+            const user = await User.findById(userId)
 
-            const streamingsData = []
+            const filteredUser = await StreamingControllers.getUserStreaming(user)
 
-            await Promise.all(user.searching_for.map(async stremingId => {
-
-                const streamingData = await Streaming.findById(stremingId).select("image")
-                streamingsData.push(streamingData)
-
-            }))
-
-            user.searching_for = streamingsData
-
-            res.json(user)
+            res.json(filteredUser)
         } catch (error) {
             res.status(500).json(error)
         }

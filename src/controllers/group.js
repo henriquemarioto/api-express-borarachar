@@ -28,8 +28,7 @@ class GroupControllers {
 
             await Promise.all(groups.map(async group => {
                 
-                const filteredGroup = await GroupControllers.filterGroupsData(group)
-                group = filteredGroup
+                group = await GroupControllers.filterGroupsData(group)
 
             }))
             

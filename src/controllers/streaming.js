@@ -37,6 +37,21 @@ class StreamingControllers {
             res.status(500).json(error)
         }
     }
+
+    static async getUserStreaming(user){
+        const streamingsData = []
+
+        await Promise.all(user.searching_for.map(async stremingId => {
+
+            const streamingData = await Streaming.findById(stremingId).select("image")
+            streamingsData.push(streamingData)
+
+        }))
+
+        user.searching_for = streamingsData
+
+        return user
+    }
 }
 
 export default StreamingControllers
