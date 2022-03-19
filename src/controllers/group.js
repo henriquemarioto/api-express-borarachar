@@ -134,13 +134,17 @@ class GroupControllers {
 
             const group = await Group.findById(id)
 
+            if(userId === group.owner || userId === group.members.find(item => item.userId === userId) && group.members.length > 1){
+                return res.status(400).json({error: "O dono não pode sair se o grupo tiver membro"})
+            }
+
             const members = group.members.filter(item => item.userId !== userId)
 
             const groupUpdated = await Group.findByIdAndUpdate(id, { members }, {
                 returnDocument: "after"
             })
 
-            res.status(201).json(groupUpdated)
+            res.status(201).json({})
 
         } catch (error) {
             res.status(500).json(error)
