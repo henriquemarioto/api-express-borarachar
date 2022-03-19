@@ -58,10 +58,10 @@ class GroupControllers {
     static async updateGroup(req, res) {
         try {
             const { id } = req.params
-            const { name, description, members_limit, owner, pix_key, pay_day, account_email, account_password, searching_for_people } = req.body
+            const { name, description, members_limit, owner, pix_key, pay_day, account_email, account_password, searching_for_members } = req.body
 
             const groupUpdated = await Group.findByIdAndUpdate(id, {
-                name, description, members_limit, owner, pix_key, pay_day, account_email, account_password, searching_for_people, updated_at: new Date(), new: true
+                name, description, members_limit, owner, pix_key, pay_day, account_email, account_password, searching_for_members, updated_at: new Date(), new: true
             }, {
                 returnDocument: "after"
             })
@@ -99,9 +99,8 @@ class GroupControllers {
                 return res.status(400).json({error: "Usuário ja faz parte desse grupo"})
             }
 
-            const groupFull = group.members.length >= group.members_limit
-
-            if(groupFull){
+            //Se estiver cheio
+            if (group.members.length >= group.members_limit){
                 return res.status(400).json({error: "Grupo cheio"})
             }
 
@@ -111,8 +110,13 @@ class GroupControllers {
                 owner: false
             }]
 
+            let searching_for_members = true
+            //Se encheu depois que o membro entrou
+            if (members.length >= group.members_limit){
+                searching_for_members = false
+            }
             
-            const groupUpdated = await Group.findByIdAndUpdate(id, { members }, {
+            const groupUpdated = await Group.findByIdAndUpdate(id, { members, searching_for_members }, {
                 returnDocument: "after"
             })
 
@@ -130,24 +134,7 @@ class GroupControllers {
 
             const group = await Group.findById(id)
 
-            const isAreadyMember = group.members.find(item => item.userId === userId)
-
-            if (isAreadyMember) {
-                return res.status(400).json({ error: "Usuário ja faz parte desse grupo" })
-            }
-
-            const groupFull = group.members.length >= group.members_limit
-
-            if (groupFull) {
-                return res.status(400).json({ error: "Grupo cheio" })
-            }
-
-            const members = [...group.members, {
-                userId,
-                status: "pending",
-                owner: false
-            }]
-
+            const members = group.members.filter(item => item.userId !== userId)
 
             const groupUpdated = await Group.findByIdAndUpdate(id, { members }, {
                 returnDocument: "after"
