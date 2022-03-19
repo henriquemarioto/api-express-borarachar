@@ -24,7 +24,7 @@ class GroupControllers {
 
     static async getAllGroups(req, res) {
         try {
-            const groups = await Group.find().select("members").select("name").select("owner").select("streaming").select("members_limit")
+            const groups = await Group.find().select("members").select("name").select("owner").select("streaming").select("members_limit").select("searching_for_members")
             await Promise.all(groups.map(async group => {
                 
                 group = await GroupControllers.filterGroupsData(group)
