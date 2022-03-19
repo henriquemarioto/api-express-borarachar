@@ -25,11 +25,9 @@ class GroupControllers {
     static async getAllGroups(req, res) {
         try {
             const groups = await Group.find().select("members").select("name").select("owner").select("streaming")
-
             await Promise.all(groups.map(async group => {
                 
                 group = await GroupControllers.filterGroupsData(group)
-
             }))
             
             //const filteredGroups = await GroupControllers.filterGroupsInfo(groups)
@@ -140,6 +138,10 @@ class GroupControllers {
 
             const members = group.members.filter(item => item.userId !== userId)
 
+            if(!members.length){
+                await Group.findByIdAndDelete(id)
+            }
+
             const groupUpdated = await Group.findByIdAndUpdate(id, { members }, {
                 returnDocument: "after"
             })
@@ -161,10 +163,11 @@ class GroupControllers {
         const newMembers = await User.find({ $or: [...membersArrObj] }).select("avatar_url")
         group.members = newMembers
     
-    
+        
         const streamingData = await Streaming.findById(group.streaming.streamingId)
         group.streaming = { name: streamingData.name, image: streamingData.image, plan: streamingData.plans.find(item => item.name === group.streaming.plan) }
-    
+        
+        console.log('a')
         return group
     }
 
