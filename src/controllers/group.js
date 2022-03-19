@@ -24,7 +24,7 @@ class GroupControllers {
 
     static async getAllGroups(req, res) {
         try {
-            const groups = await Group.find().select("members").select("name").select("owner").select("streaming")
+            const groups = await Group.find().select("members").select("name").select("owner").select("streaming").select("members_limit")
             await Promise.all(groups.map(async group => {
                 
                 group = await GroupControllers.filterGroupsData(group)
@@ -168,7 +168,6 @@ class GroupControllers {
         const streamingData = await Streaming.findById(group.streaming.streamingId)
         group.streaming = { name: streamingData.name, image: streamingData.image, plan: streamingData.plans.find(item => item.name === group.streaming.plan) }
         
-        console.log('a')
         return group
     }
 
