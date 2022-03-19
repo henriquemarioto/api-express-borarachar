@@ -57,7 +57,11 @@ class UserControllers {
             const { id } = req.params
             const user = await User.findById(id)
 
-            const filteredUser = await StreamingControllers.getUserStreaming(user)
+            let filteredUser = await StreamingControllers.getUserStreaming(user)
+
+            
+
+            filteredUser.already_member = await UserControllers.getUserGroups(id)
 
             res.json(filteredUser)
         } catch (error) {
@@ -65,33 +69,22 @@ class UserControllers {
         }
     }
 
-    static async getUserGroups(req, res) {
-        try {
-            const groups = await Group.find({
-                members: {
-                    $elemMatch: {
-                        userId: req.userId
-                    }
+    static async getUserGroups(id) {
+        const groups = await Group.find({
+            members: {
+                $elemMatch: {
+                    userId: id
                 }
-            })
-
-            if (!groups.length) {
-                throw "Nenhum grupo encontrado"
             }
+        })
 
-            const filteredGroupData = []
+        const filteredGroupData = await Promise.all(groups.map(async group => {
 
-            await Promise.all(groups.map(async group => {
+            return await GroupControllers.filterGroupsData(group)
 
-                const filteredGroup = await GroupControllers.filterGroupsData(group)
-                filteredGroupData.push(filteredGroup)
+        }))
 
-            }))
-
-            res.status(200).json(groups)
-        } catch (error) {
-            res.status(500).json({ error })
-        }
+        return filteredGroupData
     }
 
     static async recoveryPassword(req, res) {
