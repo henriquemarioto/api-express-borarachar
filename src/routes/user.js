@@ -7,7 +7,7 @@ const routerUsers = Router()
 routerUsers.use(isAuthenticated)
 routerUsers.get("", UserControllers.getAllUsers)
 routerUsers.get("/groups", UserControllers.getUserGroups)
-routerUsers.get("/profile", UserControllers.getUserById)
+routerUsers.get("/:id", UserControllers.getUserById)
 routerUsers.patch("/:id", isUserOwner, UserControllers.updateUser)
 routerUsers.delete("/:id", isUserOwner, UserControllers.deleteUser)
 

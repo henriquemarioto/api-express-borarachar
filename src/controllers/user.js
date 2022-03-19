@@ -54,8 +54,8 @@ class UserControllers {
 
     static async getUserById(req, res) {
         try {
-            const { userId } = req
-            const user = await User.findById(userId)
+            const { id } = req.params
+            const user = await User.findById(id)
 
             const filteredUser = await StreamingControllers.getUserStreaming(user)
 
