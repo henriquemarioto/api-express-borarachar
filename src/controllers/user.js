@@ -120,7 +120,7 @@ class UserControllers {
                 returnDocument: "after"
             })
 
-            res.json(userUpdated)
+            res.json({})
         }
         catch (error) {
             res.status(500).json(error)
