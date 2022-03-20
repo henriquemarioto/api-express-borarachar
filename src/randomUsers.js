@@ -61,7 +61,7 @@ async function CreateRandomUser() {
         const searching_for = []
 
         for(let i = 0; i < numberOfStreaming; i++){
-            const streamingIndex = randomNumber(1, streamingsIds.length)
+            const streamingIndex = randomNumber(0, streamingsIds.length)
             if ((streamingsIds[streamingIndex] !== searching_for.find(item => item === streamingsIds[streamingIndex]))){
                 searching_for.push(streamingsIds[streamingIndex])
             }
