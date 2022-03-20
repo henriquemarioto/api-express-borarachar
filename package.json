@@ -17,6 +17,7 @@
     "mongoose-unique-validator": "^3.0.0"
   },
   "devDependencies": {
+    "axios": "^0.26.1",
     "nodemon": "^2.0.15"
   }
 }

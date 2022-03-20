@@ -53,28 +53,33 @@ export const isGroupOwner = (req, res, next) => {
 };
 
 export const isUserOwner = (req, res, next) => {
-    const { authorization } = req.headers;
-    const token = authorization.split(" ")[1];
-    const userId = req.params.id;
+    try {
+        const { authorization } = req.headers;
+        const token = authorization.split(" ")[1];
+        const userId = req.params.id;
 
-    jsonwebtoken.verify(
-        token,
-        process.env.SECRET,
-        async (err, decoded) => {
-            const tokenUserId = decoded.id;
+        jsonwebtoken.verify(
+            token,
+            process.env.SECRET,
+            async (err, decoded) => {
+                const tokenUserId = decoded.id;
 
-            const user = await User.findById(userId)
-            const userDbId = user._id.toString()
+                const user = await User.findById(userId)
+                const userDbId = user._id.toString()
 
-            if (!user) {
-                return res.status(404).json({ error: "user not found" });
+                if (!user) {
+                    return res.status(404).json({ error: "user not found" });
+                }
+
+                if (userDbId !== tokenUserId) {
+                    return res.status(401).json({ error: "This token not is from this user" });
+                }
+
+                return next();
             }
-
-            if (userDbId !== tokenUserId) {
-                return res.status(401).json({ error: "This token not is from this user" });
-            }
-
-            return next();
-        }
-    );
+        );
+    } catch (error) {
+        res.status(500).json(error)
+    }
+    
 };
