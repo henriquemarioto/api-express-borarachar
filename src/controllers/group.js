@@ -66,7 +66,7 @@ class GroupControllers {
   static async getGroupById(req, res) {
     try {
       const { id } = req.params;
-      const group = await Group.findById(id);
+      const group = await Group.findById(id).select("+account_password");
 
       const filteredGroup = await GroupControllers.allDataGroupId(group);
 
