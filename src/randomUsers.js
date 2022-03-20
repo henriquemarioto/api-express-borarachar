@@ -36,11 +36,10 @@ function randomBoolean() {
 async function CreateRandomUser() {
     const apiEndpoint = "https://api-express-dividecomigo.herokuapp.com"
 
-    const people1 = await axios.get('https://api.namefake.com/').then(res => res.data)
-    const people2 = await axios.get('https://api.namefake.com/').then(res => res.data)
+    const people = await axios.get('https://api.namefake.com/').then(res => res.data)
 
-    const name1 = people1.name.split(' ')[0].toLowerCase()
-    const name2 = people2.name.split(' ')[1].toLowerCase()
+    const name1 = people.name.split(' ')[0].toLowerCase()
+    const name2 = people.name.split(' ')[1].toLowerCase()
 
     const user = (await axios.post(`${apiEndpoint}/register`, {
         email: `${name1.replace('.', '')}@${name2.replace('.', '')}.com`,
