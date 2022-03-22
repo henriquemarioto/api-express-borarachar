@@ -231,6 +231,7 @@ class GroupControllers {
 
     const streamingData = await Streaming.findById(group.streaming.streamingId);
     group.streaming = {
+      _id: streamingData._id,
       name: streamingData.name,
       image: streamingData.image,
       plan: streamingData.plans.find(

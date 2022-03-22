@@ -36,7 +36,6 @@ class SearchControllers {
 
       res.status(200).json({ groups, users });
     } catch (error) {
-        console.log(error)
       res.status(500).json(error);
     }
   }
