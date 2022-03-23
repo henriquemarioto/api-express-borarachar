@@ -9,6 +9,6 @@ routerUsers.get("", UserControllers.getAllUsers)
 routerUsers.get("/:id", UserControllers.getUserById)
 routerUsers.patch("/:id/recovery/password", isUserOwner, UserControllers.recoveryPassword)
 routerUsers.patch("/:id", isUserOwner, UserControllers.updateUser)
-routerUsers.delete("/:id", isUserOwner, UserControllers.deleteUser)
+//routerUsers.delete("/:id", isUserOwner, UserControllers.deleteUser)
 
 export default routerUsers
