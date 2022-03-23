@@ -81,13 +81,10 @@ class GroupControllers {
       const {
         name,
         description,
-        members_limit,
-        owner,
         pix_key,
         pay_day,
         account_email,
         account_password,
-        searching_for_members,
       } = req.body;
 
       const groupUpdated = await Group.findByIdAndUpdate(
@@ -95,13 +92,10 @@ class GroupControllers {
         {
           name,
           description,
-          members_limit,
-          owner,
           pix_key,
           pay_day,
           account_email,
           account_password,
-          searching_for_members,
           updated_at: new Date(),
           new: true,
         },
