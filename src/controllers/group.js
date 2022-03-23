@@ -272,6 +272,34 @@ class GroupControllers {
 
     return group;
   }
+
+  static async removeMember(req, res) {
+    try {
+      const { userId } = req.body;
+      const { id } = req.params;
+
+      const group = await Group.findById(id);
+
+      console.log(req.userId, group);
+      if (req.userId !== group.owner) {
+        return res.status(400).json({ error: "Você não é dono do grupo" });
+      }
+
+      const newGroupMembers = group.members.filter(
+        (item) => item.userId !== userId
+      );
+
+      await Group.updateOne({ _id: id }, { members: newGroupMembers });
+
+      console.log("deu certo");
+
+      res.status(204).json({});
+    } catch (error) {
+      console.log(error)
+      res.status(500).json(error)
+    }
+    
+  }
 }
 
 export default GroupControllers;
