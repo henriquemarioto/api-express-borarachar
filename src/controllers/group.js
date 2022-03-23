@@ -280,7 +280,6 @@ class GroupControllers {
 
       const group = await Group.findById(id);
 
-      console.log(req.userId, group);
       if (req.userId !== group.owner) {
         return res.status(400).json({ error: "Você não é dono do grupo" });
       }
@@ -291,14 +290,40 @@ class GroupControllers {
 
       await Group.updateOne({ _id: id }, { members: newGroupMembers });
 
-      console.log("deu certo");
+      res.status(204).json({});
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+    }
+  }
+
+  static async updatePay(req, res) {
+    try {
+      const { userId, status } = req.body;
+      const { id } = req.params;
+      const arrStatus = ["paid", "unpaid", "pending"]
+
+      const group = await Group.findById(id);
+
+      if (req.userId !== group.owner) {
+        return res.status(400).json({ error: "Você não é dono do grupo" });
+      }
+
+      if(!(arrStatus.some(item => status === item))){
+        return res.status(400).json({error: "Este status não existe"})
+      }
+
+      group.members.find(
+        (item) => item.userId === userId
+      ).status = status;
+
+      await Group.updateOne({ _id: id }, { members: group.members });
 
       res.status(204).json({});
     } catch (error) {
-      console.log(error)
-      res.status(500).json(error)
+      console.log(error);
+      res.status(500).json(error);
     }
-    
   }
 }
 

@@ -11,6 +11,7 @@ routerGroups.get("/:id", GroupControllers.getGroupById)
 routerGroups.patch("/:id/join", GroupControllers.joinGroup)
 routerGroups.patch("/:id/exit", GroupControllers.exitGroup)
 routerGroups.patch("/:id/remove", GroupControllers.removeMember)
+routerGroups.patch("/:id/updatestatus", GroupControllers.updatePay);
 routerGroups.patch("/:id", GroupControllers.updateGroup)
 routerGroups.delete("/:id", GroupControllers.deleteGroup)
 
