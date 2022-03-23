@@ -15,7 +15,6 @@ class GroupControllers {
         pay_day,
         account_email,
         account_password,
-        searching_for_members,
       } = req.body;
 
       const members = [{ userId: req.userId, status: "", owner: true }];
@@ -31,7 +30,7 @@ class GroupControllers {
         pay_day,
         account_email,
         account_password,
-        searching_for_members,
+        searching_for_members: true,
       });
 
       res.status(201).json({ id: group.id });
