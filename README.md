@@ -1,5 +1,5 @@
 
-# api-express-dividecomigo
+# api-express-borarachar
 Api em express do capstone DivideComigo m3
 
 Endpoint: https://api-express-dividecomigo.herokuapp.com/
