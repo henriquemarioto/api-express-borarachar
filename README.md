@@ -2,6 +2,17 @@
 # api-express-borarachar
 Api em express do capstone DivideComigo m3
 
+## Tecnologias utilziadas
+ ### BackEnd
+ 
+ - NodeJs
+ - Express
+ - Jsonwebtoken
+ - mongoose
+ - mongoose-unique-validator
+ - cors
+ - dotenv
+
 Endpoint: https://api-express-dividecomigo.herokuapp.com/
 
 # Users
