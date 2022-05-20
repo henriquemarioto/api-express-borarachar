@@ -1,6 +1,6 @@
 
 # api-express-borarachar
-Api em express do capstone DivideComigo m3
+Api em express do capstone DivideComigo m3: https://github.com/henriquemarioto/capstone-m3-borarachar
 
 ## Tecnologias utilziadas
  ### BackEnd
